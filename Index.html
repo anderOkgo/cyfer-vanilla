@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Cyfer</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+	<script type="text/javascript" src="js/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/datatables.min.js"></script>
+	<script type="text/javascript" src="js/FileSaver.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<style>
+		#area_a, #area_b
+		{
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="jumbotron jumbotron-fluid">
+	  <div class="container">
+	    <h1 class="display-6">Cifrador</h1>
+	    <p class="lead">cifrador online.</p>
+	  </div>
+	</div>
+
+	<div class="container">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">Llave</span>
+			</div>
+			<input type="text" id="llave" class="form-control" placeholder="Llave" value="0" aria-label="Username" aria-describedby="basic-addon1">
+		</div>
+		    
+		<div class="input-group mb-3">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Escriba Tetxo</span>
+		  </div>
+		  <textarea name="area_a" id="area_a" cols="30" rows="10"></textarea>
+	  	</div>
+	  	<hr>
+	  	<div class="input-group mb-3">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text">Texto Cifrado</span>
+		  </div>
+		  <textarea name="area_a" id="area_b" cols="30" rows="10"></textarea>
+		</div>
+		<br>
+
+		<button class="btn btn-outline-success" id="btn">Cifrar</button>
+		<button class ="btn btn-outline-warning" id="btn2">Decifrar</button>
+		<button class ="btn btn-outline-info" id="save-btn">Descrgar</button>
+		<hr>
+		<div class="input-group">
+		  <div class="custom-file">
+		    <input type="file" id="file-input" />
+		    <label class="custom-file-label" for="file-input">Seleccione un Archivo</label>
+		  </div>
+		</div>
+		<hr>
+		<h3>Contenido del archivo:</h3>
+		<pre id="contenido-archivo"></pre>
+	</div>
+</body>
+
+<script>
+	$(document).ready(function() 
+	{
+		String.prototype.reverse = function() 
+		{
+			var x = this.length;
+			var cadena = "";
+			while (x>=0) 
+			{
+				cadena = cadena + this.charAt(x);
+				x--;
+			}
+			return cadena;
+		};
+
+		var  cy = (key,str) =>
+		{
+			var Newstr = "";
+			var KeyPos = 0;
+			var lenkey = key.length;
+			var lenstr = str.length;
+			str        = str.reverse();
+			for (x = 0; x < lenstr; x++)
+			{
+				EncCharNum  = (str.charCodeAt(x)) + key.charCodeAt(KeyPos);
+				EncCharNum1 = (((EncCharNum & 240)/16)|48);
+				EncCharNum2 = ((EncCharNum & 15) | 48);
+				Newstr += String.fromCharCode(EncCharNum1) + String.fromCharCode(EncCharNum2);
+				KeyPos ++;
+				if (KeyPos > lenkey-1){KeyPos = 0;}
+			}
+			return(Newstr);
+		}
+
+		var dcy = (key,str) =>
+		{
+			var Newstr = "";
+			var KeyPos = 0;
+			var lenkey = key.length;
+			var lenstr = str.length;
+			str        = str.reverse();
+			for (x = lenstr; x >= 2; x-=2)
+			{
+				DecCharNum1 = (str.charCodeAt(x-1) & 15);
+				DecCharNum2 = (str.charCodeAt(x-2) & 15);
+				DecCharNum  = (DecCharNum1 * 16 | DecCharNum2) - key.charCodeAt(KeyPos);
+			if (DecCharNum<0){DecCharNum=DecCharNum * (-1)}
+				Newstr += String.fromCharCode(DecCharNum);
+				KeyPos ++;
+			if (KeyPos > lenkey-1){KeyPos = 0;}
+			}
+				Newstr = Newstr.reverse();
+				return(Newstr);
+			}
+
+		var  cifrar = () =>
+		{
+			let llave   = $("#llave").val();
+			let text    = document.getElementById("area_a").value;
+			text    	= btoa(text);
+			let cifrado = eval(atob("Y3kobGxhdmUsdGV4dCk="));//cy(llave,text)
+			document.getElementById("area_b").value = (cifrado);
+		}
+		var decifrar = () =>
+		{
+			let llave   = $("#llave").val();
+			let text    = document.getElementById("area_b").value;
+			let cifrado = eval(atob("ZGN5KGxsYXZlLHRleHQp"));//dcy(llave,text)
+			cifrado 	= atob(cifrado);
+			document.getElementById("area_a").value=(cifrado);
+		}
+		
+
+    	$("#save-btn").click(function()
+    	{ 
+			let text = document.getElementById("area_b").value;
+			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "testfile1.txt");
+		});
+
+    	var leerArchivo = (e) =>
+    	{
+		  let archivo = e.target.files[0];
+			if (!archivo)
+			{
+				return;
+			}
+
+			let lector = new FileReader();
+
+			lector.onload = function(e)
+			{
+				let contenido = e.target.result;
+				mostrarContenido(contenido);
+			};
+
+	  		lector.readAsText(archivo);
+		}
+
+		var  mostrarContenido = (text) =>
+		{
+			let llave          = $("#llave").val();
+			let elemento       = document.getElementById('contenido-archivo');
+			let mensaje        = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text))
+			elemento.innerHTML = mensaje;
+		}
+
+		document.getElementById('file-input').addEventListener('change', leerArchivo, false);
+		document.getElementById('btn').addEventListener('click', cifrar, false);
+		document.getElementById('btn2').addEventListener('click', decifrar, false);
+
+	});
+</script>
+</html>
