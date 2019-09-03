@@ -65,72 +65,10 @@
 <script>
 	$(document).ready(function()
 	{
-		String.prototype.reverse = function() 
-		{
-			return this.split("").reverse().join("");
-		};
-
-		var cy = (ll, ca) =>
-		{
-			let nc = "";
-			let li = 0;
-			ca           = ca.reverse();
-			for (x = 0; x < ca.length; x++)
-			{
-				p1 = (ca.charCodeAt(x)) + ll.charCodeAt(li);
-				p2 = (((p1 & 240) / 16) | 48);
-				p3 = ((p1 & 15) | 48);
-				nc += String.fromCharCode(p2) + String.fromCharCode(p3);
-				li ++;
-				if (li > ll.length - 1){li = 0;}
-			}
-			return nc;
-		}
-
-		var dcy = (ll, ca) =>
-		{
-			let nc = "";
-			let li = 0;
-			ca           = ca.reverse();
-			for (x = ca.length; x >= 2; x -= 2)
-			{
-				p2 = (ca.charCodeAt(x - 1) & 15);
-				p3 = (ca.charCodeAt(x - 2) & 15);
-				p1 = (p2 * 16 | p3) - ll.charCodeAt(li);
-				if (p1 < 0){p1 = p1 * (-1)}
-				nc += String.fromCharCode(p1);
-				li ++;
-				if (li > ll.length - 1){li = 0;}
-			}
-			nc = nc.reverse();
-			return nc ;
-		}
-
-		var ZXhl = 
-		{
-			'c':
-			(ot = false, ll = false) =>
-			{
-				return btoa(eval(atob("Y3kobGwsb3Qp")));//cy(ll,ot);
-			}
-			,"d":
-
-			(ot = false, ll = false) =>
-			{
-				try 
-				{
-					return atob(eval(atob("ZGN5KGxsLG90KQ==")));//dcy(llave,text);
-				}
-				catch (e)
-				{
-					alert(atob("VmVyaWZpY2FyIExsYXZl"));
-				}	
-			}
-		};
-		
+		var sy = eval(btoa("exe"));
     	var leer_archivo = (e) =>
     	{
-		  let archivo = e.target.files[0];
+			let archivo = e.target.files[0];
 			if (!archivo){return;}
 			let lector = new FileReader();
 			lector.onload = (e) =>
@@ -144,23 +82,23 @@
 		var  mostrar_contenido = (text) =>
 		{
 			let llave = $("#inp_llave").val();
-			$("#txtarea_ci").val(eval(btoa("exe")).d(text,$("#inp_llave").val()));
+			$("#txtarea_ci").val(sy.d(text,$("#inp_llave").val()));
 		}
 
 		$("#btn_descargar").click(function()
     	{
-    		$("#txtarea_dci").val((eval(btoa("exe")).c(btoa($("#txtarea_ci").val()),$("#inp_llave").val())));
+    		$("#txtarea_dci").val(sy.c(btoa($("#txtarea_ci").val()),$("#inp_llave").val()));
 			let text = $("#txtarea_dci").val();
 			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 			saveAs(blob, "Cyfer.txt");
 		});
 
 		$('#btn_ci').click(function(){
-			$("#txtarea_dci").val((eval(btoa("exe")).c(btoa($("#txtarea_ci").val()),$("#inp_llave").val())));
+			$("#txtarea_dci").val(sy.c(btoa($("#txtarea_ci").val()),$("#inp_llave").val()));
 		});
 
 		$('#btn_dc').click(function(){
-			$("#txtarea_ci").val(eval(btoa("exe")).d(atob($("#txtarea_dci").val()),$("#inp_llave").val()));
+			$("#txtarea_ci").val(sy.d(atob($("#txtarea_dci").val()),$("#inp_llave").val()));
 		});
 
 		document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
