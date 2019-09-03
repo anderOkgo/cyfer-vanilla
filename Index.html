@@ -11,18 +11,18 @@
 	<script type="text/javascript" src="js/FileSaver.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<style>
-		#txtarea_cy, #txtarea_dcy
+		.input-group-text
 		{
-			width: 100%;
+			min-width: 120px;
 		}
 	</style>
 </head>
 <body>
 	<div class="jumbotron jumbotron-fluid">
-	  <div class="container">
-	    <h1 class="display-6">Cifrador</h1>
-	    <p class="lead">cifrador online.</p>
-	  </div>
+		<div class="container">
+			<h1 class="display-6">Cifrador</h1>
+			<p class="lead">cifrador online.</p>
+		</div>
 	</div>
 
 	<div class="container">
@@ -30,23 +30,23 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">Llave</span>
 			</div>
-			<input type="text" id="inp_llave" class="form-control" placeholder="Llave" value="0" aria-label="Username" aria-describedby="basic-addon1">
+			<input type="text" id="inp_llave" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
 		</div>
 		    
 		<div class="input-group mb-3">
-		  <div class="input-group-prepend">
-		    <span class="input-group-text">Escriba Tetxo</span>
-		  </div>
-		  <textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_cy" id="txtarea_cy" cols="30" rows="10"></textarea>
+			<div class="input-group-prepend">
+				<span class="input-group-text">Escriba Tetxo</span>
+			</div>
+			<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_cy" id="txtarea_cy" cols="30" rows="10"></textarea>
 	  	</div>
 	  	<button class="btn btn-outline-success" id="btn_cy">Cifrar</button>
 	  	<hr>
 
 	  	<div class="input-group mb-3">
-		  <div class="input-group-prepend">
-		    <span class="input-group-text">Texto Cifrado</span>
-		  </div>
-		  <textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dcy" id="txtarea_dcy" cols="30" rows="10"></textarea>
+			<div class="input-group-prepend">
+				<span class="input-group-text">Texto Cifrado</span>
+			</div>
+			<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dcy" id="txtarea_dcy" cols="30" rows="10"></textarea>
 		</div>
 		<br>
 
@@ -54,10 +54,10 @@
 		<button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
 		<hr>
 		<div class="input-group">
-		  <div class="custom-file">
-		    <input type="file" id="inpfile_cargar_archivo" />
-		    <label class="custom-file-label" for="inpfile_cargar_archivo">Seleccione un Archivo</label>
-		  </div>
+			<div class="custom-file">
+				<input type="file" id="inpfile_cargar_archivo" />
+				<label class="custom-file-label" for="inpfile_cargar_archivo">Seleccione un Archivo</label>
+			</div>
 		</div>
 	</div>
 </body>
@@ -70,24 +70,24 @@
 			return this.split("").reverse().join("");
 		};
 
-		var cy = (llave,cadena) =>
+		var cy = (llave, cadena) =>
 		{
 			let nueva_cadena = "";
 			let llave_indice = 0;
 			cadena           = cadena.reverse();
 			for (x = 0; x < cadena.length; x++)
 			{
-				parte1  = (cadena.charCodeAt(x)) + llave.charCodeAt(llave_indice);
-				parte2  = (((parte1 & 240) / 16) | 48);
-				parte3  = ((parte1 & 15) | 48);
+				parte1 = (cadena.charCodeAt(x)) + llave.charCodeAt(llave_indice);
+				parte2 = (((parte1 & 240) / 16) | 48);
+				parte3 = ((parte1 & 15) | 48);
 				nueva_cadena += String.fromCharCode(parte2) + String.fromCharCode(parte3);
 				llave_indice ++;
-				if (llave_indice > llave.length-1){llave_indice = 0;}
+				if (llave_indice > llave.length - 1){llave_indice = 0;}
 			}
 			return nueva_cadena;
 		}
 
-		var dcy = (llave,cadena) =>
+		var dcy = (llave, cadena) =>
 		{
 			let nueva_cadena = "";
 			let llave_indice = 0;
@@ -96,41 +96,40 @@
 			{
 				parte2 = (cadena.charCodeAt(x - 1) & 15);
 				parte3 = (cadena.charCodeAt(x - 2) & 15);
-				parte1  = (parte2 * 16 | parte3) - llave.charCodeAt(llave_indice);
-			if (parte1 < 0){parte1 = parte1 * (-1)}
-			nueva_cadena += String.fromCharCode(parte1);
-			llave_indice ++;
-
-			if (llave_indice > llave.length - 1){llave_indice = 0;}
+				parte1 = (parte2 * 16 | parte3) - llave.charCodeAt(llave_indice);
+				if (parte1 < 0){parte1 = parte1 * (-1)}
+				nueva_cadena += String.fromCharCode(parte1);
+				llave_indice ++;
+				if (llave_indice > llave.length - 1){llave_indice = 0;}
 			}
 				nueva_cadena = nueva_cadena.reverse();
 				return nueva_cadena ;
-			}
+		}
 
 		var cifrar = () =>
 		{
 			let llave   = $("#inp_llave").val();
-			let text    = btoa(document.getElementById("txtarea_cy").value);
+			let text    = btoa($("#txtarea_cy").val());
 			let cifrado = eval(atob("Y3kobGxhdmUsdGV4dCk="));//cy(llave,text)
-			document.getElementById("txtarea_dcy").value = btoa(cifrado);
+			$("#txtarea_dcy").val(btoa(cifrado));
 		}
-		var decifrar = () =>
+
+		var decifrar = (otext = false) =>
 		{
-			let llave   = $("#inp_llave").val();
-			let text    = atob(document.getElementById("txtarea_dcy").value);
-			let cifrado = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text)
-			document.getElementById("txtarea_cy").value = (cifrado);
+			try 
+			{
+				otext == false ? text = atob($("#txtarea_dcy").val()) : text = otext;
+				let llave   = $("#inp_llave").val();
+				let cifrado = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text)
+				$("#txtarea_cy").val(cifrado);
+			}
+			catch (e)
+			{
+			  alert("Verificar Llave") ;
+			}
+			
 		}
 		
-
-    	$("#btn_descargar").click(function()
-    	{
-    		cifrar();
-			let text = document.getElementById("txtarea_dcy").value;
-			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, "Cyfer.txt");
-		});
-
     	var leer_archivo = (e) =>
     	{
 		  let archivo = e.target.files[0];
@@ -149,7 +148,7 @@
 				}
 				catch (e)
 				{
-				  alert("Verificar Llave");
+				  alert(atob("VmVyaWZpY2FyIExsYXZl"));
 				}
 				
 			};
@@ -159,16 +158,27 @@
 
 		var  mostrar_contenido = (text) =>
 		{
-			let llave          = $("#inp_llave").val();
-			let elemento       = document.getElementById('txtarea_cy');
-			let mensaje        = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text))
-			elemento.innerHTML = mensaje;
+			let llave = $("#inp_llave").val();
+			decifrar(text)
 		}
 
-		document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
-		document.getElementById('btn_cy').addEventListener('click', cifrar, false);
-		document.getElementById('btn_dcy').addEventListener('click', decifrar, false);
+		$("#btn_descargar").click(function()
+    	{
+    		cifrar();
+			let text = $("#txtarea_dcy").val();
+			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "Cyfer.txt");
+		});
 
+		$('#btn_cy').click(function(){
+			cifrar();
+		});
+
+		$('#btn_dcy').click(function(){
+			decifrar();
+		});
+
+		document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
 	});
 </script>
 </html>
