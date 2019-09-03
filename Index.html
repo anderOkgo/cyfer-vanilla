@@ -21,7 +21,7 @@
 	<div class="jumbotron jumbotron-fluid">
 		<div class="container">
 			<h1 class="display-6">Cifrador</h1>
-			<p class="lead">cifrador online.</p>
+			<p class="lead">Cifrador Cliente.</p>
 		</div>
 	</div>
 
@@ -37,20 +37,20 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text">Escriba Tetxo</span>
 			</div>
-			<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_cy" id="txtarea_cy" cols="30" rows="10"></textarea>
+			<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci" cols="30" rows="10"></textarea>
 	  	</div>
-	  	<button class="btn btn-outline-success" id="btn_cy">Cifrar</button>
+	  	<button class="btn btn-outline-success" id="btn_ci">Cifrar</button>
 	  	<hr>
 
 	  	<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Texto Cifrado</span>
 			</div>
-			<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dcy" id="txtarea_dcy" cols="30" rows="10"></textarea>
+			<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dci" id="txtarea_dci" cols="30" rows="10"></textarea>
 		</div>
 		<br>
 
-		<button class="btn btn-outline-warning" id="btn_dcy">Decifrar</button>
+		<button class="btn btn-outline-warning" id="btn_dc">Decifrar</button>
 		<button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
 		<hr>
 		<div class="input-group">
@@ -106,29 +106,34 @@
 				return nueva_cadena ;
 		}
 
-		var cifrar = () =>
+		var ex = 
 		{
-			let llave   = $("#inp_llave").val();
-			let text    = btoa($("#txtarea_cy").val());
-			let cifrado = eval(atob("Y3kobGxhdmUsdGV4dCk="));//cy(llave,text)
-			$("#txtarea_dcy").val(btoa(cifrado));
-		}
+			'c':
 
-		var decifrar = (otext = false) =>
-		{
-			try 
+			cifrar = (otext = false) =>
 			{
-				otext == false ? text = atob($("#txtarea_dcy").val()) : text = otext;
+				otext == false ? text = btoa($("#txtarea_ci").val()) : text = otext;
 				let llave   = $("#inp_llave").val();
-				let cifrado = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text)
-				$("#txtarea_cy").val(cifrado);
+				let cifrado = eval(atob("Y3kobGxhdmUsdGV4dCk="));//cy(llave,text)
+				$("#txtarea_dci").val(btoa(cifrado));
 			}
-			catch (e)
+			,"d":
+
+			decifrar = (otext = false) =>
 			{
-			  alert("Verificar Llave") ;
+				try 
+				{
+					otext == false ? text = atob($("#txtarea_dci").val()) : text = otext;
+					let llave   = $("#inp_llave").val();
+					let cifrado = atob(eval(atob("ZGN5KGxsYXZlLHRleHQp")));//dcy(llave,text)
+					$("#txtarea_ci").val(cifrado);
+				}
+				catch (e)
+				{
+				  alert("Verificar Llave");
+				}	
 			}
-			
-		}
+		};
 		
     	var leer_archivo = (e) =>
     	{
@@ -159,23 +164,23 @@
 		var  mostrar_contenido = (text) =>
 		{
 			let llave = $("#inp_llave").val();
-			decifrar(text)
+			ex.d(text);
 		}
 
 		$("#btn_descargar").click(function()
     	{
-    		cifrar();
-			let text = $("#txtarea_dcy").val();
+    		ex.c();
+			let text = $("#txtarea_dci").val();
 			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 			saveAs(blob, "Cyfer.txt");
 		});
 
-		$('#btn_cy').click(function(){
-			cifrar();
+		$('#btn_ci').click(function(){
+			ex.c();
 		});
 
-		$('#btn_dcy').click(function(){
-			decifrar();
+		$('#btn_dc').click(function(){
+			ex.d();
 		});
 
 		document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
