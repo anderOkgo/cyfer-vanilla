@@ -15,49 +15,100 @@
 		{
 			min-width: 120px;
 		}
+
+		#res::selection, #res {
+			background: white;
+			color: white;
+		}
 	</style>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
+	<div class="jumbotron jumbotron-fluid bg-info">
 		<div class="container">
-			<h1 class="display-6">Cifrador</h1>
-			<p class="lead">Cifrador Cliente.</p>
+			<h1 class="display-6 text-center">Cifrador</h1>
+			<p class="lead text-center">Este es un cifrador del lado del cliente.</p>
 		</div>
 	</div>
 
 	<div class="container">
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Llave</span>
-			</div>
-			<input type="text" id="inp_llave" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
-		</div>
-		    
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Escriba Tetxo</span>
-			</div>
-			<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci" cols="30" rows="10"></textarea>
-	  	</div>
-	  	<button class="btn btn-outline-success" id="btn_ci">Cifrar</button>
-	  	<hr>
 
-	  	<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Texto Cifrado</span>
-			</div>
-			<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dci" id="txtarea_dci" cols="30" rows="10"></textarea>
-		</div>
-		<br>
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+		    	<a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Cifrar</a>
+		  	</li>
+		  	<li class="nav-item">
+		    	<a class="nav-link" href="#buzz" role="tab" data-toggle="tab">Cuentas</a>
+		  	</li>
+		</ul>
 
-		<button class="btn btn-outline-warning" id="btn_dc">Decifrar</button>
-		<button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
-		<hr>
-		<div class="input-group">
-			<div class="custom-file">
-				<input type="file" id="inpfile_cargar_archivo" />
-				<label class="custom-file-label" for="inpfile_cargar_archivo">Seleccione un Archivo</label>
+	<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="profile">
+				
+				<div id="cifrado" class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">Llave</span>
+					</div>
+					<input type="password" id="inp_llave" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+						    
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Escriba Tetxo</span>
+					</div>
+					<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci" cols="30" rows="10"></textarea>
+			  	</div>
+			  	<button class="btn btn-outline-success" id="btn_ci">Cifrar</button>
+			  	<hr>
+
+			  	<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Texto Cifrado</span>
+					</div>
+					<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dci" id="txtarea_dci" cols="30" rows="10"></textarea>
+				</div>
+				<br>
+
+				<button class="btn btn-outline-warning" id="btn_dc">Decifrar</button>
+				<button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
+				<hr>
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="file" id="inpfile_cargar_archivo" />
+					</div>
+				</div>
+
 			</div>
+
+			  <div role="tabpanel" class="tab-pane fade in" id="buzz">
+			
+				<div class="contenedor">
+					<div id="cifrado" class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1">Llave</span>
+						</div>
+						<input type="password" id="inpAgregar2" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+				    <div id="result"></div>
+
+					<div class="form-group">
+					    <label for="exampleFormControlSelect1">Cuentas</label>
+					    <select class="form-control" id="sortable">
+					    </select>
+					</div>
+				    <button class="btn btn-outline-primary" id="actualizar">Actualizar</button>
+				    <button class="btn btn-outline-danger" id="borrar">Borrar toda la lista</button><span class="alert" id="cla"></span>
+				</div>
+				<hr>
+
+				<div class="input-group">
+				  <div class="custom-file">
+				    <input type="file" id="inpfile_cargar_archivo2" />
+				  </div>
+				</div>
+				<hr>
+				<span><span id="pres" class="" role="alert"></span>@<span id="res" class="" role="alert"></span></span>
+			  </div>
 		</div>
 	</div>
 </body>
@@ -66,6 +117,121 @@
 	$(document).ready(function()
 	{
 		var sy = eval(btoa("exe"));
+		valor = [];
+		imprimirLista();
+		cargar_clave_nombre();
+
+		$("#sortable").change(function()
+		{
+			imprimir_pass($("#sortable option:selected").text());
+		});
+
+		$("#sortable").change(function()
+      {
+        imprimir_pass($("#sortable option:selected").text());
+
+      });
+
+      $("#actualizar").click(function()
+      {
+        imprimirLista();
+      });
+
+      $("#borrar").click(function()
+      {
+        borrarLista($(this).siblings("ul"));
+        $("#cla").text("");
+        imprimirLista();
+
+      });
+
+      function cargar_clave_nombre()
+      {
+        for (x = 0; x <= localStorage.length - 1; x++) {
+          clave = localStorage.key(x);
+          if (clave == "clave")
+          {
+          	$("#cla").text("lista cargada");
+          }
+          else
+          {
+          	$("#cla").text("");
+          }
+        }
+      }
+
+      function agregarRegistro(id, usuario, pass)
+      {
+          valor.push(`{"id":"${id}","usuario":"${usuario}","pass":"${pass}"}`);
+          option = `<option id="${id}">${id}</option>`;
+          $("#sortable").append(option);
+      }
+
+      function imprimirLista()
+      {
+        leer_descifer(localStorage.getItem("clave"));
+      }
+
+      function borrarLista(elemento)
+      {
+        localStorage.removeItem("clave");
+        cargar_clave_nombre();
+      }
+
+      function imprimir_pass(coincidencia)
+      {
+        $.each(valor, function(index, value)
+        {
+			val = JSON.parse(value);
+			if(val.id == coincidencia)
+			{
+			$('#res').text(val.pass);
+			$('#pres').text(val.usuario);
+			}
+        });
+      }
+
+		var leer_archivo2 = (e) =>
+		{
+			let archivo = e.target.files[0];
+			if (!archivo){return;}
+			let lector = new FileReader();
+
+			lector.onload = (e) =>
+			{
+				let contenido = e.target.result;
+				$("#inpfile_cargar_archivo2").val("");
+				localStorage.setItem("clave", contenido);
+				
+				leer_descifer(contenido,true);
+			};
+			lector.readAsText(archivo);
+
+		}
+
+        function leer_descifer(contenido,carga=false)
+        {
+        	$("#sortable option").remove();
+        cargar_clave_nombre();
+          var contenido = sy.d(atob(contenido),$("#inpAgregar2").val());
+
+          if(contenido!=="Verificar Llave")
+          {
+          	agregarRegistro("--Seleccione--","","");
+            var lineas = contenido.split('\n');
+            for(var linea of lineas)
+            {
+              vari = linea.split(',');
+              agregarRegistro(vari[0],vari[1],(vari[2]).replace("%0D",""));
+            }
+          }
+          else if(contenido =="Verificar Llave" && carga){alert("Verificar Llave")}
+
+        }
+
+    document.getElementById('inpfile_cargar_archivo2').addEventListener('change', leer_archivo2, false);
+
+
     	var leer_archivo = (e) =>
     	{
 			let archivo = e.target.files[0];
@@ -74,6 +240,7 @@
 			lector.onload = (e) =>
 			{
 				let contenido = e.target.result;
+				$("#inpfile_cargar_archivo").val("");
 				mostrar_contenido(atob(contenido));
 			};
 	  		lector.readAsText(archivo);
