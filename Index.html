@@ -125,11 +125,6 @@
 			imprimir_pass($("#Select_cuentas option:selected").text());
 		});
 
-		$("#Select_cuentas").change(function()
-		{
-			imprimir_pass($("#Select_cuentas option:selected").text());
-		});
-
 		$("#actualizar").click(function()
 		{
 			imprimirLista();
@@ -137,7 +132,7 @@
 
 		$("#borrar").click(function()
 		{
-			borrarLista($(this).siblings("ul"));
+			borrarLista();
 			$("#cla").text("");
 			imprimirLista();
 
