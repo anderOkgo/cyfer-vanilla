@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Cyfer</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<meta name="theme-color" content="#225d8b">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link rel="manifest" href="/manifest.json">
+	<link href="/favicon.ico" type="image/x-icon" rel="icon"/><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+
+	<link rel="apple-touch-icon" sizes="57x57" href="/images/icons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/images/icons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/images/icons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/images/icons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/images/icons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/datatables.min.js"></script>
+	<script type="text/javascript" src="js/FileSaver.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<style>
+		.input-group-text
+		{
+			min-width: 120px;
+		}
+
+		#respuesta::selection, #respuesta {
+			background: white;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1 class="display-6 text-center">Cifrador</h1>
+			<p class="lead text-center">Este es un cifrador del lado del cliente.</p>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+		    	<a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Cifrar</a>
+		  	</li>
+		  	<li class="nav-item">
+		    	<a class="nav-link" href="#buzz" role="tab" data-toggle="tab">Cuentas</a>
+		  	</li>
+		</ul>
+
+	<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="profile">
+				
+				<div id="cifrado" class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">Llave</span>
+					</div>
+					<input type="password" id="inp_llave" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+						    
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Escriba Tetxo</span>
+					</div>
+					<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci" cols="30" rows="5"></textarea>
+			  	</div>
+			  	<button class="btn btn-outline-success" id="btn_ci">Cifrar</button>
+			  	<hr>
+
+			  	<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Texto Cifrado</span>
+					</div>
+					<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dci" id="txtarea_dci" cols="30" rows="5"></textarea>
+				</div>
+				<br>
+
+				<button class="btn btn-outline-warning" id="btn_dc">Decifrar</button>
+				<button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
+				<hr>
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="file" id="inpfile_cargar_archivo" />
+					</div>
+				</div>
+
+			</div>
+
+			  <div role="tabpanel" class="tab-pane fade in" id="buzz">
+			
+				<div class="contenedor">
+					<div id="cifrado" class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1">Llave</span>
+						</div>
+						<input type="password" id="inpAgregar2" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+
+					<div class="form-group">
+					    <label for="exampleFormControlSelect1">Cuentas</label>
+					    <select class="form-control" id="Select_cuentas">
+					    </select>
+					</div>
+				    <button class="btn btn-outline-primary" id="actualizar">Actualizar</button>
+				    <button class="btn btn-outline-danger" id="borrar">Borrar toda la lista</button><span class="alert" id="cla"></span>
+				</div>
+				<hr>
+
+				<div class="input-group">
+				  <div class="custom-file">
+				    <input type="file" id="inpfile_cargar_archivo2" />
+				  </div>
+				</div>
+				<hr>
+				<span><span id="use_respuesta" class="" role="alert"></span>@<span id="respuesta" class="" role="alert"></span></span>
+				<br>
+			  </div>
+		</div>
+		<br>
+		<br>
+	</div>
+	<footer>Copyright © 2019 @anderOkgo Todos los derechos reservados.</footer>
+</body>
+
+<script>
+	$(document).ready(function()
+	{
+		var sy = eval(btoa("exe"));
+		valor = [];
+		imprimirLista();
+		cargar_clave_nombre();
+
+		$("#Select_cuentas").change(function()
+		{
+			imprimir_pass($("#Select_cuentas option:selected").text());
+		});
+
+		$("#actualizar").click(function()
+		{
+			imprimirLista();
+		});
+
+		$("#borrar").click(function()
+		{
+			borrarLista();
+			$("#cla").text("");
+			$('#respuesta').text("");
+			$('#use_respuesta').text("");
+			imprimirLista();
+		});
+
+		function cargar_clave_nombre()
+		{
+			for (x = 0; x <= localStorage.length - 1; x++)
+			{
+				clave = localStorage.key(x);
+				if (clave == "clave")
+				{
+					$("#cla").text("lista cargada");
+				}
+				else
+				{
+					$("#cla").text("");
+				}
+			}
+		}
+
+		function agregarRegistro(id, usuario, pass)
+		{
+		  valor.push(`{"id":"${id}","usuario":"${usuario}","pass":"${pass}"}`);
+		  option = `<option id="${id}">${id}</option>`;
+		  $("#Select_cuentas").append(option);
+		}
+
+		function imprimirLista()
+		{
+			leer_descifer(localStorage.getItem("clave"));
+		}
+
+		function borrarLista(elemento)
+		{
+			localStorage.removeItem("clave");
+			cargar_clave_nombre();
+		}
+
+		function imprimir_pass(coincidencia)
+		{
+			$.each(valor, function(index, value)
+			{
+				val = JSON.parse(value);
+				if(val.id == coincidencia)
+				{
+					$('#respuesta').text(val.pass);
+					$('#use_respuesta').text(val.usuario);
+				}
+			});
+		}
+
+		var leer_archivo2 = (e) =>
+		{
+			let archivo = e.target.files[0];
+			if (!archivo){return;}
+			let lector = new FileReader();
+			lector.onload = (e) =>
+			{
+				let contenido = e.target.result;
+				$("#inpfile_cargar_archivo2").val("");
+				localStorage.setItem("clave", contenido);
+				
+				leer_descifer(contenido,true);
+			};
+			lector.readAsText(archivo);
+		}
+
+		function leer_descifer(contenido,carga=false)
+		{
+			$("#Select_cuentas option").remove();
+			cargar_clave_nombre();
+			var contenido = sy.d(atob(contenido),$("#inpAgregar2").val());
+
+			if(contenido!=="Verificar Llave")
+			{
+				agregarRegistro("--Seleccione--","","");
+				var lineas = contenido.split('\n');
+				for(var linea of lineas)
+				{
+					vari = linea.split(',');
+					agregarRegistro(vari[0],vari[1],(vari[2]).replace("%0D",""));
+				}
+			}
+			else if(contenido =="Verificar Llave" && carga){alert("Verificar Llave")}
+		}
+
+    	var leer_archivo = (e) =>
+    	{
+			let archivo = e.target.files[0];
+			if (!archivo){return;}
+			let lector = new FileReader();
+			lector.onload = (e) =>
+			{
+				let contenido = e.target.result;
+				$("#inpfile_cargar_archivo").val("");
+				mostrar_contenido(atob(contenido));
+			};
+	  		lector.readAsText(archivo);
+		}
+
+		var  mostrar_contenido = (text) =>
+		{
+			let llave = $("#inp_llave").val();
+			$("#txtarea_ci").val(sy.d(text,$("#inp_llave").val()));
+		}
+
+		$("#btn_descargar").click(function()
+    	{
+    		$("#txtarea_dci").val(sy.c(btoa($("#txtarea_ci").val()),$("#inp_llave").val()));
+			let text = $("#txtarea_dci").val();
+			let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+			saveAs(blob, "Cyfer.txt");
+		});
+
+		$('#btn_ci').click(function(){
+			$("#txtarea_dci").val(sy.c(btoa($("#txtarea_ci").val()),$("#inp_llave").val()));
+		});
+
+		$('#btn_dc').click(function(){
+			$("#txtarea_ci").val(sy.d(atob($("#txtarea_dci").val()),$("#inp_llave").val()));
+		});
+
+		document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
+		document.getElementById('inpfile_cargar_archivo2').addEventListener('change', leer_archivo2, false);
+	});
+</script>
+</html>
