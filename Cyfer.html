@@ -4,12 +4,12 @@
 	<meta charset="UTF-8">
 	<title>Cyfer</title>
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-	<meta name="theme-color" content="#225d8b">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-	<link rel="manifest" href="/manifest.json">
+	<meta name="theme-color" content="#004c8b">
+	<!-- <link rel="manifest" href="/manifest.json"> -->
+	<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
 	
 
-	<!-- <link rel="apple-touch-icon" sizes="57x57" href="/images/icons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="57x57" href="/images/icons/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="/images/icons/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="/images/icons/apple-icon-76x76.png">
@@ -392,9 +392,27 @@ if (typeof module !== 'undefined') {
 			min-width: 120px;
 		}
 
-		#respuesta::selection, #respuesta {
+		#respuesta::selection, #respuesta
+		{
 			background: white;
 			color: white;
+		}
+		.thema
+		{
+			background-color: #0277bd !IMPORTANT;
+			color:white !IMPORTANT;
+		}
+
+		body
+		{
+			background-color: #fafaff !IMPORTANT;
+		}
+
+		.footer-copyright
+		{
+		    overflow: hidden;
+		    color: white;
+		    background-color: rgb(2, 119, 189);
 		}
 	</style>
 	<style>
@@ -408,10 +426,10 @@ if (typeof module !== 'undefined') {
 	</style>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
+	<div class="jumbotron jumbotron-fluid thema">
 		<div class="container">
-			<h1 class="display-6 text-center">Cifrador</h1>
-			<p class="lead text-center">Este es un cifrador del lado del cliente.</p>
+			<h1 class="display-6 text-center">Cifer</h1>
+			<p class="lead text-center">Soluciones del lado del cliente.</p>
 		</div>
 	</div>
 
@@ -432,14 +450,14 @@ if (typeof module !== 'undefined') {
 				
 				<div id="cifrado" class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text" id="basic-addon1">Llave</span>
+						<span class="input-group-text thema" id="basic-addon1">Llave</span>
 					</div>
 					<input type="password" id="inp_llave" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
 				</div>
 						    
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text">Escriba Tetxo</span>
+						<span class="input-group-text thema">Escriba Tetxo</span>
 					</div>
 					<textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci" cols="30" rows="5"></textarea>
 			  	</div>
@@ -448,7 +466,7 @@ if (typeof module !== 'undefined') {
 
 			  	<div class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text">Texto Cifrado</span>
+						<span class="input-group-text thema">Texto Cifrado</span>
 					</div>
 					<textarea class="form-control" placeholder="Digite el texto a descifrar" name="txtarea_dci" id="txtarea_dci" cols="30" rows="5"></textarea>
 				</div>
@@ -470,7 +488,7 @@ if (typeof module !== 'undefined') {
 				<div class="contenedor">
 					<div id="cifrado" class="input-group mb-3">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="basic-addon1">Llave</span>
+							<span class="input-group-text thema" id="basic-addon1">Llave</span>
 						</div>
 						<input type="password" id="inpAgregar2" class="form-control" placeholder="Llave" value="nollave" aria-label="Username" aria-describedby="basic-addon1">
 					</div>
@@ -498,7 +516,30 @@ if (typeof module !== 'undefined') {
 		<br>
 		<br>
 	</div>
-	<footer>Copyright © 2019 @anderOkgo Todos los derechos reservados.</footer>
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Borrar</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <p>¿Desea borrar la lista?.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+	        <button type="button" class="btn btn-danger" id="borrar_ok">Si</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<footer>
+		<div class="footer-copyright text-center py-3">Copyright © 2020 @anderOkgo Todos los derechos reservados.</div>
+	</footer>
 </body>
 
 
@@ -523,11 +564,18 @@ if (typeof module !== 'undefined') {
 
 		$("#borrar").click(function()
 		{
+			$('#myModal').modal('show');
+		});
+
+		$("#borrar_ok").click(function()
+		{
+			
 			borrarLista();
 			$("#cla").text("");
 			$('#respuesta').text("");
 			$('#use_respuesta').text("");
 			imprimirLista();
+			$('#myModal').modal('hide');
 		});
 
 		function cargar_clave_nombre()
@@ -606,7 +654,10 @@ if (typeof module !== 'undefined') {
 				for(var linea of lineas)
 				{
 					vari = linea.split(',');
-					agregarRegistro(vari[0],vari[1],(vari[2]).replace("%0D",""));
+					if (typeof vari[2] !== 'undefined')
+					{
+						agregarRegistro(vari[0],vari[1],(vari[2]).replace("%0D",""));
+					}
 				}
 			}
 			else if(contenido =="Verificar Llave" && carga){alert("Verificar Llave")}
