@@ -153,50 +153,51 @@
 
 <script type="module">
   import { cyfer } from "./js/cyfer.js";
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function () {
     let valor = [];
 
     imprimirLista();
     cargar_clave_nombre();
 
     const selectElement = document.getElementById("Select_cuentas");
-    selectElement.addEventListener("change", () => {
+    selectElement.addEventListener("change", function () {
       imprimir_pass(selectElement.options[selectElement.selectedIndex].text);
     });
 
-    const actualizarButton = document.getElementById("actualizar").addEventListener("click", imprimirLista);
-    const borrarButton = document.getElementById("borrar");
-    borrarButton.addEventListener("click", () => {
+    const actualizarButton = document.getElementById("actualizar");
+    actualizarButton.addEventListener("click", imprimirLista);
 
+    const borrarButton = document.getElementById("borrar");
+    borrarButton.addEventListener("click", function () {
       var promptResult = confirm("Are you sure you want to delete this record?");
       if (promptResult) {
         borrarLista();
-        document.getElementById("cla").textContent = ""
-        document.getElementById('respuesta').textContent = ""
-        document.getElementById('use_respuesta').textContent = ""
+        document.getElementById("cla").textContent = "";
+        document.getElementById("respuesta").textContent = "";
+        document.getElementById("use_respuesta").textContent = "";
         imprimirLista();
       } else {
         return false;
       }
-
     });
 
     function cargar_clave_nombre() {
       for (let x = 0; x <= localStorage.length - 1; x++) {
         let clave = localStorage.key(x);
-        if (clave == "clave") {
+        if (clave === "clave") {
           document.getElementById("cla").textContent = "lista cargada";
-        }
-        else {
-          document.getElementById("cla").textContent = ""
+        } else {
+          document.getElementById("cla").textContent = "";
         }
       }
     }
 
     function agregarRegistro(id, usuario, pass) {
       valor.push(`{"id":"${id}","usuario":"${usuario}","pass":"${pass}"}`);
-      let option = `<option id="${id}">${id}</option>`;
-      $("#Select_cuentas").append(option);
+      let option = document.createElement("option");
+      option.id = id;
+      option.textContent = id;
+      document.getElementById("Select_cuentas").appendChild(option);
     }
 
     function imprimirLista() {
@@ -209,71 +210,78 @@
     }
 
     function imprimir_pass(coincidencia) {
-      $.each(valor, function (index, value) {
+      valor.forEach(function (value) {
         let val = JSON.parse(value);
-        if (val.id == coincidencia) {
-          $('#respuesta').text(val.pass);
-          $('#use_respuesta').text(val.usuario);
+        if (val.id === coincidencia) {
+          document.getElementById("respuesta").textContent = val.pass;
+          document.getElementById("use_respuesta").textContent = val.usuario;
         }
       });
     }
 
-    var leer_archivo2 = (e) => {
+    var leer_archivo2 = function (e) {
       let archivo = e.target.files[0];
-      if (!archivo) { return; }
+      if (!archivo) {
+        return;
+      }
       let lector = new FileReader();
-      lector.onload = (e) => {
+      lector.onload = function (e) {
         let contenido = e.target.result;
         document.getElementById("inpfile_cargar_archivo2").value = "";
         localStorage.setItem("clave", contenido);
-
         leer_descifer(contenido, true);
       };
       lector.readAsText(archivo);
-    }
-
-    function leer_descifer(contenido, carga = false) {
-      $("#Select_cuentas option").remove();
-      cargar_clave_nombre();
-      var contenido = cyfer().dcy((contenido), $("#inpAgregar2").val());
-
-      if (contenido !== "Verificar Llave") {
-        agregarRegistro("--Seleccione--", "", "");
-        var lineas = contenido.split('\n');
-        for (var linea of lineas) {
-          let vari = linea.split(',');
-          if (typeof vari[2] !== 'undefined') {
-            agregarRegistro(vari[0], vari[1], (vari[2]).replace("%0D", ""));
-          }
-        }
-      }
-      else if (contenido == "Verificar Llave" && carga) { alert("Verificar Llave") }
-    }
-
-    var leer_archivo = (e) => {
-      let archivo = e.target.files[0];
-      if (!archivo) { return; }
-      let lector = new FileReader();
-      lector.onload = (e) => {
-        let contenido = e.target.result;
-        document.getElementById("inpfile_cargar_archivo").value = "";;
-        mostrar_contenido((contenido));
-      };
-      lector.readAsText(archivo);
-    }
-
-    const mostrarContenido = (text) => {
-      const llave = document.getElementById("inp_llave").value;
-      document.getElementById("txtarea_ci").value = cyfer().dcy(text, llave);
     };
 
+    function leer_descifer(contenido, carga = false) {
+      let selectCuentas = document.getElementById("Select_cuentas");
+      while (selectCuentas.firstChild) {
+        selectCuentas.removeChild(selectCuentas.firstChild);
+      }
+
+      cargar_clave_nombre();
+      var contenidoDescifrado = cyfer().dcy(contenido, document.getElementById("inpAgregar2").value);
+
+      if (contenidoDescifrado !== "Verificar Llave") {
+        agregarRegistro("--Seleccione--", "", "");
+        var lineas = contenidoDescifrado.split("\n");
+        for (var linea of lineas) {
+          let vari = linea.split(",");
+          if (typeof vari[2] !== "undefined") {
+            agregarRegistro(vari[0], vari[1], vari[2].replace("%0D", ""));
+          }
+        }
+      } else if (contenidoDescifrado === "Verificar Llave" && carga) {
+        alert("Verificar Llave");
+      }
+    }
+
+    var leer_archivo = function (e) {
+      let archivo = e.target.files[0];
+      if (!archivo) {
+        return;
+      }
+      let lector = new FileReader();
+      lector.onload = function (e) {
+        let contenido = e.target.result;
+        document.getElementById("inpfile_cargar_archivo").value = "";
+        mostrarContenido(contenido);
+      };
+      lector.readAsText(archivo);
+    };
+
+    function mostrarContenido(text) {
+      const llave = document.getElementById("inp_llave").value;
+      document.getElementById("txtarea_ci").value = cyfer().dcy(text, llave);
+    }
 
     const btnDescargar = document.getElementById("btn_descargar");
     const txtareaDci = document.getElementById("txtarea_dci");
     const txtareaCi = document.getElementById("txtarea_ci");
     const inpLlave = document.getElementById("inp_llave");
 
-    btnDescargar.addEventListener("click", () => {
+    btnDescargar.addEventListener("click", function () {
       txtareaDci.value = cyfer().cy(txtareaCi.value, inpLlave.value);
 
       let text = txtareaDci.value;
@@ -283,16 +291,16 @@
 
     const btnCi = document.getElementById("btn_ci");
     const btnDc = document.getElementById("btn_dc");
-    btnCi.addEventListener("click", () => {
+    btnCi.addEventListener("click", function () {
       txtareaDci.value = cyfer().cy(txtareaCi.value, inpLlave.value);
     });
 
-    btnDc.addEventListener("click", () => {
+    btnDc.addEventListener("click", function () {
       txtareaCi.value = cyfer().dcy(txtareaDci.value, inpLlave.value);
     });
 
-    document.getElementById('inpfile_cargar_archivo').addEventListener('change', leer_archivo, false);
-    document.getElementById('inpfile_cargar_archivo2').addEventListener('change', leer_archivo2, false);
+    document.getElementById("inpfile_cargar_archivo").addEventListener("change", leer_archivo, false);
+    document.getElementById("inpfile_cargar_archivo2").addEventListener("change", leer_archivo2, false);
   });
 </script>
 
