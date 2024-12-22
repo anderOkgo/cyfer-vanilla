@@ -1,1 +1,0 @@
-G:/Mi unidad/Documents/Variant/FTPSync/cyfer-vanilla/0.symbolics.bat
