@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Cyfer</title>
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#004c8b">
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
@@ -49,12 +49,12 @@
     }
 
     .thema {
-      background-color: #0277bd !IMPORTANT;
-      color: white !IMPORTANT;
+      background-color: #0277bd !important;
+      color: white !important;
     }
 
     body {
-      background-color: #fafaff !IMPORTANT;
+      background-color: #fafaff !important;
     }
 
     footer {
@@ -62,6 +62,82 @@
       color: white;
       text-align: center;
       padding: 1rem 0;
+    }
+
+    /* Responsive menu styles */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0277bd;
+      color: white;
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu li {
+      margin: 0 0.5rem;
+    }
+
+    .menu li a {
+      text-decoration: none;
+      color: white;
+      transition: color 0.3s ease;
+    }
+
+    .menu li a:hover {
+      color: #00e676;
+    }
+
+    /* Hamburger menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamb-line {
+      background-color: white;
+      height: 3px;
+      width: 25px;
+      margin: 4px 0;
+    }
+
+    #checkbox_toggle {
+      display: none;
+    }
+
+    #checkbox_toggle:checked~.menu {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #0277bd;
+      width: 100%;
+      padding: 1rem 0;
+    }
+
+    @media (max-width: 268px) {
+      .menu {
+        display: none;
+        flex-direction: column;
+      }
+
+      .hamburger {
+        display: flex;
+      }
     }
   </style>
 
@@ -72,6 +148,22 @@
 </head>
 
 <body>
+  <!-- Responsive Menu -->
+  <nav class="navbar">
+    <div class="nav-links">
+      <input type="checkbox" id="checkbox_toggle">
+      <label for="checkbox_toggle" class="hamburger">
+        <span class="hamb-line"></span>
+        <span class="hamb-line"></span>
+        <span class="hamb-line"></span>
+      </label>
+      <ul class="menu">
+        <li><a href="https://react.animecream.com/">Animecream App</a></li>
+        <li><a href="https://www.animecream.com/">Animecream</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="jumbotron jumbotron-fluid thema">
     <div class="container">
       <h1 class="display-6 text-center">Cyfer</h1>
@@ -103,7 +195,7 @@
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text thema">Escriba Tetxo</span>
+            <span class="input-group-text thema">Escriba Texto</span>
           </div>
           <textarea class="form-control" placeholder="Digite el texto a cifrar" name="txtarea_ci" id="txtarea_ci"
             cols="30" rows="5"></textarea>
