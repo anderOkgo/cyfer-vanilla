@@ -23,6 +23,21 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
 
   <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
+    }
+
     .input-group-text {
       min-width: 120px;
     }
@@ -42,10 +57,11 @@
       background-color: #fafaff !IMPORTANT;
     }
 
-    .footer-copyright {
-      overflow: hidden;
-      color: white;
+    footer {
       background-color: rgb(2, 119, 189);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
     }
   </style>
 
@@ -104,7 +120,7 @@
         </div>
         <br>
 
-        <button class="btn btn-outline-warning" id="btn_dc">Decifrar</button>
+        <button class="btn btn-outline-warning" id="btn_dc">Descifrar</button>
         <button class="btn btn-outline-info" id="btn_descargar">Descargar</button>
         <hr>
         <div class="input-group">
@@ -147,7 +163,9 @@
     <br>
   </div>
   <footer>
-    <div class="footer-copyright text-center py-3">Copyright © 2020 @anderOkgo Todos los derechos reservados.</div>
+    <div class="footer-copyright text-center py-3">
+      Copyright © 2020 @anderOkgo Todos los derechos reservados.
+    </div>
   </footer>
 </body>
 
