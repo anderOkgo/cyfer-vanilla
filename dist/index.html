@@ -189,7 +189,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text thema" id="basic-addon1">Llave</span>
           </div>
-          <input type="password" id="inp_llave" class="form-control" placeholder="Llave" value="nollave"
+          <input type="password" id="inp_llave" class="form-control" placeholder="Llave" value="3Q6m23YyLtrUhHj0aPrKgWCjk9VbF71SR-zC-pJxn_Y"
             aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
@@ -227,7 +227,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text thema" id="basic-addon1">Llave</span>
             </div>
-            <input type="password" id="inpAgregar2" class="form-control" placeholder="Llave" value="nollave"
+            <input type="password" id="inpAgregar2" class="form-control" placeholder="Llave" value="3Q6m23YyLtrUhHj0aPrKgWCjk9VbF71SR-zC-pJxn_Y"
               aria-label="Username" aria-describedby="basic-addon1">
           </div>
           <div class="form-group">
@@ -344,16 +344,19 @@
       lector.readAsText(archivo);
     };
 
-    function leer_descifer(contenido, carga = false) {
+    // cyfer version 2 (change 20261120-cyfer-v2): a wrong key or a text that is not cyfer gives null.
+    async function leer_descifer(contenido, carga = false) {
       let selectCuentas = document.getElementById("Select_cuentas");
       while (selectCuentas.firstChild) {
         selectCuentas.removeChild(selectCuentas.firstChild);
       }
 
       cargar_clave_nombre();
-      var contenidoDescifrado = cyfer.dcy(contenido, document.getElementById("inpAgregar2").value);
+      var contenidoDescifrado = contenido
+        ? await cyfer.dcyAsync(contenido.trim(), document.getElementById("inpAgregar2").value)
+        : null;
 
-      if (contenidoDescifrado !== "Verificar Llave") {
+      if (contenidoDescifrado !== null) {
         agregarRegistro("--Seleccione--", "", "");
         var lineas = contenidoDescifrado.split("\n");
         for (var linea of lineas) {
@@ -362,7 +365,7 @@
             agregarRegistro(vari[0], vari[1], vari[2].replace("%0D", ""));
           }
         }
-      } else if (contenidoDescifrado === "Verificar Llave" && carga) {
+      } else if (carga) {
         alert("Verificar Llave");
       }
     }
@@ -381,9 +384,14 @@
       lector.readAsText(archivo);
     };
 
-    function mostrarContenido(text) {
+    async function mostrarContenido(text) {
       const llave = document.getElementById("inp_llave").value;
-      document.getElementById("txtarea_ci").value = cyfer.dcy(text, llave);
+      const descifrado = await cyfer.dcyAsync(text.trim(), llave);
+      if (descifrado === null) {
+        alert("Verificar Llave");
+        return;
+      }
+      document.getElementById("txtarea_ci").value = descifrado;
     }
 
     const btnDescargar = document.getElementById("btn_descargar");
@@ -391,8 +399,8 @@
     const txtareaCi = document.getElementById("txtarea_ci");
     const inpLlave = document.getElementById("inp_llave");
 
-    btnDescargar.addEventListener("click", function () {
-      txtareaDci.value = cyfer.cy(txtareaCi.value, inpLlave.value);
+    btnDescargar.addEventListener("click", async function () {
+      txtareaDci.value = await cyfer.cyAsync(txtareaCi.value, inpLlave.value);
 
       let text = txtareaDci.value;
       let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
@@ -401,12 +409,17 @@
 
     const btnCi = document.getElementById("btn_ci");
     const btnDc = document.getElementById("btn_dc");
-    btnCi.addEventListener("click", function () {
-      txtareaDci.value = cyfer.cy(txtareaCi.value, inpLlave.value);
+    btnCi.addEventListener("click", async function () {
+      txtareaDci.value = await cyfer.cyAsync(txtareaCi.value, inpLlave.value);
     });
 
-    btnDc.addEventListener("click", function () {
-      txtareaCi.value = cyfer.dcy(txtareaDci.value, inpLlave.value);
+    btnDc.addEventListener("click", async function () {
+      const descifrado = await cyfer.dcyAsync(txtareaDci.value.trim(), inpLlave.value);
+      if (descifrado === null) {
+        alert("Verificar Llave");
+        return;
+      }
+      txtareaCi.value = descifrado;
     });
 
     document.getElementById("inpfile_cargar_archivo").addEventListener("change", leer_archivo, false);
